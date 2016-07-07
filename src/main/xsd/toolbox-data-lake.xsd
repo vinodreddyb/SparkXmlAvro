@@ -1,0 +1,99 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<xs:element name="ticket">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="description" type="xs:string" />
+				<xs:element name="type" type="TicketType" />
+				<xs:element name="severity" type="SeverityType" />
+				<xs:element name="start" type="xs:dateTime" />
+				<xs:element name="expected" type="xs:dateTime" />
+				<xs:element name="finished" type="xs:dateTime" minOccurs="0" />
+				<xs:element name="nodes" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="node" type="NodeType" maxOccurs="unbounded" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="logs" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="log" type="LogType" maxOccurs="unbounded" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:int" />
+			<xs:attribute name="status" type="StatusType" />
+		</xs:complexType>
+	</xs:element>
+
+
+	<xs:complexType name="NodeType">
+		<xs:sequence>
+			<xs:element name="name" type="xs:string" />
+			<xs:element name="master" type="xs:boolean" />
+			<xs:element name="reason" type="xs:string" />
+			<xs:element name="customers" type="xs:int" />
+			<xs:element name="affected" type="AffectedType" />
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:int" />
+	</xs:complexType>
+
+	<xs:complexType name="AffectedType">
+		<xs:sequence>
+			<xs:element name="spid" type="SpidType" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="product" type="ProductType" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="ProductType">
+		<xs:simpleContent>
+			<xs:extension base="xs:int">
+				<xs:attribute name="type" type="xs:string" />
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+
+	<xs:complexType name="SpidType">
+		<xs:simpleContent>
+			<xs:extension base="xs:int">
+				<xs:attribute name="id" type="xs:int" />
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+
+	<xs:complexType name="LogType">
+		<xs:sequence>
+			<xs:element name="text" type="xs:string" />
+			<xs:element name="time" type="xs:dateTime" />
+			<xs:element name="type" type="xs:string" />
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:int" />
+	</xs:complexType>
+
+	<xs:simpleType name="StatusType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="open" />
+			<xs:enumeration value="closed" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="TicketType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="acute" />
+			<xs:enumeration value="planned" />
+			<xs:enumeration value="auto" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="SeverityType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="stop" />
+			<xs:enumeration value="disturbance" />
+			<xs:enumeration value="info" />
+		</xs:restriction>
+	</xs:simpleType>
+
+</xs:schema>
